@@ -2,6 +2,7 @@ package com.taskflowproject.taskflow.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,7 +19,11 @@ public class Project {
     private String description;
     private LocalDateTime start_date;
     private LocalDateTime end_date;
-    private enum status {
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public enum Status {
         CONCLUIDA,
         EM_REVISAO,
         DESENVOLVIMENTO,
@@ -26,7 +31,13 @@ public class Project {
     }
 
     @ManyToOne
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager")
     private User manager;
+
+    @OneToMany(mappedBy = "project")
+    private List<Task> tasks;
+
+    @OneToMany(mappedBy = "projectJoined")
+    private List<ProjectMember> members;
 
 }

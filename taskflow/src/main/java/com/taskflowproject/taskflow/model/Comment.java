@@ -19,8 +19,10 @@ public class Comment {
     private LocalDateTime date_time;
 
     @ManyToOne
-    private User author_comment;
+    @JoinColumn(name = "author_id")
+    private User author;
 
     @ManyToOne
-    private Task task_id;
+    @JoinColumn(name = "task_id")
+    private Task task;
 }
