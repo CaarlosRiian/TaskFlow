@@ -31,7 +31,7 @@ public class Project {
     }
 
     @ManyToOne
-    @JoinColumn(name = "manager")
+    @JoinColumn(name = "manager_id")
     private User manager;
 
     @OneToMany(mappedBy = "project")

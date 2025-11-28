@@ -3,7 +3,7 @@ package com.taskflowproject.taskflow.dto;
 import java.time.LocalDateTime;
 
 public record ProjectDTO (
-        Long id,
+        Long projectId,
         String name,
         String description,
         LocalDateTime startDate,

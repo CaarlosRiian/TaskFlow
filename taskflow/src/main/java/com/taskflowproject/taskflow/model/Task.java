@@ -29,13 +29,19 @@ public class Task {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    private enum status {
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
+
+    public enum Status {
         PENDENTE,
         EM_PROGRESSO,
         CONCLUIDA
     }
 
-    private enum priority {
+    public enum Priority {
         ALTA,
         MEDIA,
         BAIXA

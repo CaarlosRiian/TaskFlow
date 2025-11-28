@@ -21,7 +21,7 @@ public class Team {
     @JoinColumn(name = "user_id")
     private User leader;
 
-    @OneToMany(mappedBy = "teamMember")
+    @OneToMany(mappedBy = "team")
     private List<TeamMember> teamMembers;
 
 
