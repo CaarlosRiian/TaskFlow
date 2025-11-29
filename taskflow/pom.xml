@@ -44,7 +44,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -65,9 +64,13 @@
     </dependencies>
 
     <build>
+            <resources>
+                <resource>
+                    <directory>src/main/resources</directory>
+                    <filtering>false</filtering>
+                </resource>
+            </resources>
         <plugins>
-
-            <!-- Compiler plugin configurado corretamente -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -83,8 +86,6 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
-            <!-- NÃO excluir Lombok! -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
