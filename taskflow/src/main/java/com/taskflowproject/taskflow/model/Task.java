@@ -2,6 +2,9 @@ package com.taskflowproject.taskflow.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 import java.time.LocalDateTime;
 
@@ -23,10 +26,12 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "assigned_to")
+    @JsonBackReference(value = "user-task")
     private User assignedTo;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonBackReference(value = "project-task")
     private Project project;
 
     @Enumerated(EnumType.STRING)

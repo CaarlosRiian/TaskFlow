@@ -1,5 +1,7 @@
 package com.taskflowproject.taskflow.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
@@ -30,11 +32,13 @@ public class Project {
         CANCELADA
     }
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "manager_id")
     private User manager;
 
     @OneToMany(mappedBy = "project")
+    @JsonManagedReference(value = "project-task")
     private List<Task> tasks;
 
     @OneToMany(mappedBy = "projectJoined")
