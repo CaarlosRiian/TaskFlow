@@ -1,10 +1,14 @@
 package com.taskflowproject.taskflow.model;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "app_user")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,19 +20,27 @@ public class User {
 
     private String name;
     private String email;
-    private Role role;
+
+    @JsonIgnore
+    private String password;
+
     private boolean active = true;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "manager")
-    private List<Project> projects;
+    private List<Project> managedProjects;
+
+    @OneToMany(mappedBy = "assignedTo")
+    @JsonManagedReference(value = "user-task")
+    private List<Task> tasks;
 
     @OneToMany(mappedBy = "author")
-    private List<Team> teams;
+    private List<Comment> commentsUser;
 
-    @OneToMany(mappedBy = "author_comment")
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "leader")
+    private List<Team> teamsLeader;
 
-    @OneToMany(mappedBy = "assigned_to")
-    private List<Task> tasks;
+    @OneToMany(mappedBy = "projectUser")
+    private List<ProjectMember> projectMemberships;
 
 }

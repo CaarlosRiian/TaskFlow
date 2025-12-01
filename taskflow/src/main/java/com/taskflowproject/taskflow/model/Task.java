@@ -2,9 +2,11 @@ package com.taskflowproject.taskflow.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 import java.time.LocalDateTime;
-import java.util.*;
 
 @Entity
 @Getter
@@ -18,25 +20,38 @@ public class Task {
 
     private String title;
     private String description;
-    private enum status {
-        PENDENTE,
-        EM_PROGRESSO,
-        CONCLUIDA
-    }
-    private enum priority {
-        ALTA,
-        MEDIA,
-        BAIXA
-    }
+
     private LocalDateTime creation_date;
     private LocalDateTime due_date;
 
     @ManyToOne
-    private User assigned_to;
+    @JoinColumn(name = "assigned_to")
+    @JsonBackReference(value = "user-task")
+    private User assignedTo;
 
     @ManyToOne
-    private Project project_id;
+    @JoinColumn(name = "project_id")
+    @JsonBackReference(value = "project-task")
+    private Project project;
 
-    @OneToMany
-    private List<Comment> comments;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
+
+    public enum Status {
+        PENDENTE,
+        EM_PROGRESSO,
+        CONCLUIDA
+    }
+
+    public enum Priority {
+        ALTA,
+        MEDIA,
+        BAIXA
+    }
+
+
+
 }
