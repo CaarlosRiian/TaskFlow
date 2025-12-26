@@ -8,6 +8,7 @@ import java.util.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "project")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,14 +16,23 @@ import java.time.LocalDateTime;
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long project_id;
+    @Column(name = "project_id")
+    private Long projectId;
 
+    @Column(nullable = false, length = 150)
     private String name;
+
+    @Column(length = 500)
     private String description;
-    private LocalDateTime start_date;
-    private LocalDateTime end_date;
+
+    @Column(name = "start_date", nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     public enum Status {
@@ -34,14 +44,14 @@ public class Project {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", nullable = false)
     private User manager;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL,
+            orphanRemoval = true)
+
     @JsonManagedReference(value = "project-task")
     private List<Task> tasks;
 
-    @OneToMany(mappedBy = "projectJoined")
-    private List<ProjectMember> members;
 
 }

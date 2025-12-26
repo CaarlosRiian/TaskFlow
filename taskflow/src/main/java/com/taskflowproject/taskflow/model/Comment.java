@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "comment")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,16 +14,20 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_id;
+    @Column(name = "comment_id")
+    private Long commentId;
 
+    @Column(nullable = false, length = 500)
     private String message;
-    private LocalDateTime date_time;
+
+    @Column(name = "date_time", nullable = false)
+    private LocalDateTime dateTime;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @ManyToOne
-    @JoinColumn(name = "task_id")
+    @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 }

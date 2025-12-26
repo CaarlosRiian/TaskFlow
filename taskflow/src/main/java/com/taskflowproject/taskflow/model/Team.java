@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.*;
 
 @Entity
+@Table(name = "team")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,19 +13,21 @@ import java.util.*;
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long team_id;
+    @Column(name = "team_id")
+    private Long teamId;
 
+    @Column(nullable = false, length = 100)
     private String name;
+
+    @Column(length = 500)
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "leader_id", nullable = false)
     private User leader;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamMember> teamMembers;
 
 
 }
-
-

@@ -38,7 +38,7 @@ class UserServiceTest {
 
         when(userRepository.existsByEmail(dto.email())).thenReturn(false);
 
-        User savedUser = new User(1L, "Carlos Eduardo", "carlos@mail.com", "encoded", true, null, null, null, null, null);
+        User savedUser = new User(1L, "Carlos Eduardo", "carlos@mail.com", "encoded", true, null, null, null);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
         UserDTO result = userService.createUser(dto);
@@ -59,7 +59,7 @@ class UserServiceTest {
 
     @Test
     void shouldListAllUsers() {
-        User user = new User(1L, "Jeferson Queiroga", "jefdoif@mail.com", "queirogax", true, null, null, null, null, null);
+        User user = new User(1L, "Jeferson Queiroga", "jefdoif@mail.com", "queirogax", true, null, null, null);
         when(userRepository.findAll()).thenReturn(List.of(user));
 
         List<UserDTO> list = userService.listUsers();

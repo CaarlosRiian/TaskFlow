@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "task")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,13 +19,20 @@ import java.time.LocalDateTime;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long task_id;
+    @Column(name = "task_id")
+    private Long taskId;
 
+    @Column(nullable = false, length = 150)
     private String title;
+
+    @Column(length = 500)
     private String description;
 
-    private LocalDateTime creation_date;
-    private LocalDateTime due_date;
+    @Column(name = "creation_date", nullable = false)
+    private LocalDateTime creationDate;
+
+    @Column(name = "due_date")
+    private LocalDateTime dueDate;
 
     @ManyToOne
     @JoinColumn(name = "assigned_to")
@@ -39,6 +49,10 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     private Priority priority;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Comment> comments;
 
     public enum Status {
         PENDENTE,
