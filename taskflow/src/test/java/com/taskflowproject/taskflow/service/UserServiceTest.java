@@ -34,11 +34,18 @@ class UserServiceTest {
 
     @Test
     void shouldCreateUserSuccessfully() {
-        CreationUserDTO dto = new CreationUserDTO("Carlos Eduardo", "carlos@mail.com", "1234edu");
+        CreationUserDTO dto =
+                new CreationUserDTO("Carlos Eduardo", "carlos@mail.com", "1234edu");
 
         when(userRepository.existsByEmail(dto.email())).thenReturn(false);
 
-        User savedUser = new User(1L, "Carlos Eduardo", "carlos@mail.com", "encoded", true, null, null, null);
+        User savedUser = new User();
+        savedUser.setUserId(1L);
+        savedUser.setName("Carlos Eduardo");
+        savedUser.setEmail("carlos@mail.com");
+        savedUser.setPassword("encoded");
+        savedUser.setActive(true);
+
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
         UserDTO result = userService.createUser(dto);
@@ -50,16 +57,23 @@ class UserServiceTest {
 
     @Test
     void shouldNotCreateUserWithDuplicateEmail() {
-        CreationUserDTO dto = new CreationUserDTO("Carlos Eduardo", "carlos@mail.com", "1234edu");
+        CreationUserDTO dto =
+                new CreationUserDTO("Carlos Eduardo", "carlos@mail.com", "1234edu");
 
         when(userRepository.existsByEmail(dto.email())).thenReturn(true);
 
-        assertThrows(ResponseStatusException.class, () -> userService.createUser(dto));
+        assertThrows(ResponseStatusException.class,
+                () -> userService.createUser(dto));
     }
 
     @Test
     void shouldListAllUsers() {
-        User user = new User(1L, "Jeferson Queiroga", "jefdoif@mail.com", "queirogax", true, null, null, null);
+        User user = new User();
+        user.setUserId(1L);
+        user.setName("Jeferson Queiroga");
+        user.setEmail("jefdoif@mail.com");
+        user.setActive(true);
+
         when(userRepository.findAll()).thenReturn(List.of(user));
 
         List<UserDTO> list = userService.listUsers();

@@ -39,7 +39,7 @@ public class Project {
         CONCLUIDA,
         EM_REVISAO,
         DESENVOLVIMENTO,
-        CANCELADA
+        CONCLUIDO, CANCELADO, CANCELADA
     }
 
     @JsonIgnore

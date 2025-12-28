@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "task")
 @Getter
@@ -57,7 +55,8 @@ public class Task {
     public enum Status {
         PENDENTE,
         EM_PROGRESSO,
-        CONCLUIDA
+        CONCLUIDA,
+        CANCELADO
     }
 
     public enum Priority {

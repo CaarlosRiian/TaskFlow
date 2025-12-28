@@ -37,7 +37,7 @@ public class UserService {
         userRepository.save(user);
 
         return new UserDTO(
-                user.getUser_id(),
+                user.getUserId(),
                 user.getName(),
                 user.getEmail(),
                 user.isActive()
@@ -47,7 +47,7 @@ public class UserService {
     public List<UserDTO> listUsers() {
         return userRepository.findAll().stream()
                 .map(u -> new UserDTO(
-                        u.getUser_id(),
+                        u.getUserId(),
                         u.getName(),
                         u.getEmail(),
                         u.isActive()
@@ -59,7 +59,7 @@ public class UserService {
     public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
-        return new UserDTO(user.getUser_id(), user.getName(), user.getEmail(), user.isActive());
+        return new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.isActive());
     }
 
     @Transactional
@@ -75,7 +75,7 @@ public class UserService {
         user.setEmail(dto.email());
         user.setPassword(passwordEncoder.encode(dto.password()));
 
-        return new UserDTO(user.getUser_id(), user.getName(), user.getEmail(), user.isActive());
+        return new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.isActive());
     }
 
     @Transactional
@@ -90,6 +90,6 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
         user.setActive(!user.isActive());
-        return new UserDTO(user.getUser_id(), user.getName(), user.getEmail(), user.isActive());
+        return new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.isActive());
     }
 }

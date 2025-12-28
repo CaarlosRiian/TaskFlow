@@ -38,7 +38,7 @@ public class CommentService {
         comment.setMessage(dto.message());
         comment.setAuthor(author);
         comment.setTask(task);
-        comment.setDate_time(LocalDateTime.now());
+        comment.setDateTime(LocalDateTime.now());
 
         Comment saved = commentRepository.save(comment);
 
@@ -64,7 +64,7 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("Comentário não encontrado"));
 
         comment.setMessage(dto.message());
-        comment.setDate_time(LocalDateTime.now());
+        comment.setDateTime(LocalDateTime.now());
 
         Comment updated = commentRepository.save(comment);
 
@@ -80,11 +80,11 @@ public class CommentService {
 
     private CommentDTO toDTO(Comment c) {
         return new CommentDTO(
-                c.getComment_id(),
+                c.getCommentId(),
                 c.getMessage(),
-                c.getDate_time(),
-                c.getAuthor().getUser_id(),
-                c.getTask().getTask_id()
+                c.getDateTime(),
+                c.getAuthor().getUserId(),
+                c.getTask().getTaskId()
         );
     }
 }

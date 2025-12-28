@@ -31,8 +31,8 @@ public class ProjectService {
         Project project = new Project();
         project.setName(dto.name());
         project.setDescription(dto.description());
-        project.setStart_date(dto.startDate());
-        project.setEnd_date(dto.endDate());
+        project.setStartDate(dto.startDate());
+        project.setEndDate(dto.endDate());
         project.setManager(manager);
 
         project.setStatus(dto.status());
@@ -40,26 +40,26 @@ public class ProjectService {
         projectRepository.save(project);
 
         return new ProjectDTO(
-                project.getProject_id(),
+                project.getProjectId(),
                 project.getName(),
                 project.getDescription(),
-                project.getStart_date(),
-                project.getEnd_date(),
+                project.getStartDate(),
+                project.getEndDate(),
                 project.getStatus().name(),
-                project.getManager().getUser_id()
+                project.getManager().getUserId()
         );
     }
 
     public List<ProjectDTO> listProjects() {
         return projectRepository.findAll().stream()
                 .map(p -> new ProjectDTO(
-                        p.getProject_id(),
+                        p.getProjectId(),
                         p.getName(),
                         p.getDescription(),
-                        p.getStart_date(),
-                        p.getEnd_date(),
+                        p.getStartDate(),
+                        p.getEndDate(),
                         p.getStatus().name(),
-                        p.getManager().getUser_id()
+                        p.getManager().getUserId()
                 ))
                 .toList();
     }
@@ -69,13 +69,13 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto não encontrado."));
         return new ProjectDTO(
-                project.getProject_id(),
+                project.getProjectId(),
                 project.getName(),
                 project.getDescription(),
-                project.getStart_date(),
-                project.getEnd_date(),
+                project.getStartDate(),
+                project.getEndDate(),
                 project.getStatus().name(),
-                project.getManager().getUser_id()
+                project.getManager().getUserId()
         );
     }
 
@@ -89,19 +89,19 @@ public class ProjectService {
 
         project.setName(dto.name());
         project.setDescription(dto.description());
-        project.setStart_date(dto.startDate());
-        project.setEnd_date(dto.endDate());
+        project.setStartDate(dto.startDate());
+        project.setEndDate(dto.endDate());
         project.setManager(manager);
         project.setStatus(dto.status());
 
         return new ProjectDTO(
-                project.getProject_id(),
+                project.getProjectId(),
                 project.getName(),
                 project.getDescription(),
-                project.getStart_date(),
-                project.getEnd_date(),
+                project.getStartDate(),
+                project.getEndDate(),
                 project.getStatus().name(),
-                project.getManager().getUser_id()
+                project.getManager().getUserId()
         );
     }
 
