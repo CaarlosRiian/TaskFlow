@@ -1,10 +1,12 @@
 package com.taskflowproject.taskflow.controller;
 
-import com.taskflowproject.taskflow.model.Task;
+import com.taskflowproject.taskflow.dto.CreationTaskDTO;
+import com.taskflowproject.taskflow.dto.TaskDTO;
 import com.taskflowproject.taskflow.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/tasks")
@@ -17,24 +19,26 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getAllTasks() {
+    public List<TaskDTO> getAllTasks() {
         return taskService.getAllTasks();
     }
 
     @GetMapping("/{id}")
-    public Optional<Task> getTaskById(@PathVariable Long id) {
+    public TaskDTO getTaskById(@PathVariable Long id) {
         return taskService.getTaskById(id);
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return taskService.saveTask(task);
+    public TaskDTO createTask(@RequestBody @Valid CreationTaskDTO dto) {
+        return taskService.createTask(dto);
     }
 
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        task.setTask_id(id);
-        return taskService.saveTask(task);
+    public TaskDTO updateTask(
+            @PathVariable Long id,
+            @RequestBody @Valid CreationTaskDTO dto
+    ) {
+        return taskService.updateTask(id, dto);
     }
 
     @DeleteMapping("/{id}")

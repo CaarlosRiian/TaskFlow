@@ -40,7 +40,7 @@ class ProjectServiceTest {
     @Test
     void shouldCreateProjectSuccessfully() {
         User manager = new User();
-        manager.setUser_id(1L);
+        manager.setUserId(1L);
 
         CreationProjectDTO dto = new CreationProjectDTO(
                 "Projeto Alsol",
@@ -51,15 +51,17 @@ class ProjectServiceTest {
                 Project.Status.DESENVOLVIMENTO
         );
 
-        when(userRepository.findById(1L)).thenReturn(Optional.of(manager));
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.of(manager));
 
         Project savedProject = new Project();
-        savedProject.setProject_id(10L);
+        savedProject.setProjectId(10L);
         savedProject.setName(dto.name());
         savedProject.setManager(manager);
         savedProject.setStatus(dto.status());
 
-        when(projectRepository.save(any(Project.class))).thenReturn(savedProject);
+        when(projectRepository.save(any(Project.class)))
+                .thenReturn(savedProject);
 
         ProjectDTO result = projectService.createProject(dto);
 
@@ -79,8 +81,10 @@ class ProjectServiceTest {
                 Project.Status.DESENVOLVIMENTO
         );
 
-        when(userRepository.findById(99L)).thenReturn(Optional.empty());
+        when(userRepository.findById(99L))
+                .thenReturn(Optional.empty());
 
-        assertThrows(ResponseStatusException.class, () -> projectService.createProject(dto));
+        assertThrows(ResponseStatusException.class,
+                () -> projectService.createProject(dto));
     }
 }

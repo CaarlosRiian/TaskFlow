@@ -1,24 +1,35 @@
 package com.taskflowproject.taskflow.service;
 
+import com.taskflowproject.taskflow.dto.TaskDTO;
+import com.taskflowproject.taskflow.model.Project;
 import com.taskflowproject.taskflow.model.Task;
+import com.taskflowproject.taskflow.model.User;
+import com.taskflowproject.taskflow.repository.ProjectRepository;
 import com.taskflowproject.taskflow.repository.TaskRepository;
+import com.taskflowproject.taskflow.repository.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class TaskServiceTest {
 
     @Mock
     private TaskRepository taskRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private ProjectRepository projectRepository;
 
     @InjectMocks
     private TaskService taskService;
@@ -29,34 +40,34 @@ class TaskServiceTest {
     }
 
     @Test
-    void shouldSaveTaskSuccessfully() {
-        Task task = new Task();
-        task.setTask_id(1L);
-        task.setTitle("Nova Tarefa Nadic");
-
-        when(taskRepository.save(task)).thenReturn(task);
-
-        Task result = taskService.saveTask(task);
-
-        assertEquals(1L, result.getTask_id());
-        assertEquals("Nova Tarefa Nadic", result.getTitle());
-    }
-
-    @Test
     void shouldReturnTaskById() {
+        User user = new User();
+        user.setUserId(1L);
+
+        Project project = new Project();
+        project.setProjectId(1L);
+
         Task task = new Task();
-        task.setTask_id(1L);
+        task.setTaskId(1L);
+        task.setTitle("Teste");
+        task.setAssignedTo(user);
+        task.setProject(project);
+        task.setStatus(Task.Status.PENDENTE);
+        task.setPriority(Task.Priority.ALTA);
+        task.setCreationDate(LocalDateTime.now());
 
         when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
 
-        Optional<Task> result = taskService.getTaskById(1L);
+        TaskDTO result = taskService.getTaskById(1L);
 
-        assertTrue(result.isPresent());
-        assertEquals(1L, result.get().getTask_id());
+        assertNotNull(result);
+        assertEquals(1L, result.id());
+        assertEquals("Teste", result.title());
     }
 
     @Test
     void shouldDeleteTask() {
+        when(taskRepository.existsById(1L)).thenReturn(true);
         doNothing().when(taskRepository).deleteById(1L);
 
         assertDoesNotThrow(() -> taskService.deleteTask(1L));
