@@ -25,10 +25,9 @@ public class AuthService {
     private final String jwtSecret = "minhaSuperChaveSecretaMuitoLongaParaJWT12345";
 
     public LoginResponseDTO login(LoginRequestDTO loginRequest) {
-        User user = userRepository.findAll().stream()
-                .filter(u -> u.getEmail().equals(loginRequest.getEmail()))
-                .findFirst()
+        User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        ;
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new RuntimeException("Senha inválida");

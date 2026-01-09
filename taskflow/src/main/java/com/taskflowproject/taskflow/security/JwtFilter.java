@@ -23,12 +23,21 @@ import java.util.Collections;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final String jwtSecret = "minhaSuperChaveSecretaMuitoLongaParaJWT12345"; // ideal: colocar no application.properties
+    private final String jwtSecret = "minhaSuperChaveSecretaMuitoLongaParaJWT12345";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+
+        if (path.startsWith("/v3/api-docs") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/h2-console")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 
@@ -44,7 +53,6 @@ public class JwtFilter extends OncePerRequestFilter {
                         .getBody();
 
                 String email = claims.getSubject();
-                String cargo = claims.get("cargo", String.class);
 
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
@@ -53,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
 
             } catch (Exception e) {
-                log.warn("JWT inválido: {}", e.getMessage());
+                log.warn("JWT invalid: {}", e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
@@ -61,4 +69,5 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
 }
