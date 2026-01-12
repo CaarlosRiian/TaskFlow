@@ -10,6 +10,7 @@ import com.taskflowproject.taskflow.repository.ProjectMemberRepository;
 import com.taskflowproject.taskflow.repository.ProjectRepository;
 import com.taskflowproject.taskflow.repository.RoleRepository;
 import com.taskflowproject.taskflow.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,23 +37,24 @@ public class ProjectMemberService {
         this.roleRepository = roleRepository;
     }
 
+    @Transactional
     public ProjectMemberDTO add(CreationProjectMemberDTO dto) {
 
         User user = userRepository.findById(dto.userId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found."));
 
         Project project = projectRepository.findById(dto.projectId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project Not Found."));
 
         Role role = roleRepository.findById(dto.roleId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Função não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role Not Found."));
 
         boolean exists = projectMemberRepository.existsByUserUserIdAndProjectProjectIdAndRoleRoleId(
                 dto.userId(), dto.projectId(), dto.roleId()
         );
 
         if (exists) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já é membro deste projeto com esta função");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is already a member of this project with this role.");
         }
 
         ProjectMember member = new ProjectMember();
@@ -63,6 +65,7 @@ public class ProjectMemberService {
         return toDTO(projectMemberRepository.save(member));
     }
 
+    @Transactional
     public List<ProjectMemberDTO> listByProject(Long projectId) {
         return projectMemberRepository.findByProjectProjectId(projectId)
                 .stream()
@@ -70,9 +73,28 @@ public class ProjectMemberService {
                 .toList();
     }
 
+    @Transactional
+    public ProjectMemberDTO updateRole(Long projectMemberId, Long roleId) {
+
+        ProjectMember member = projectMemberRepository.findById(projectMemberId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Project member not found."
+                ));
+
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Role not found."
+                ));
+
+        member.setRole(role);
+
+        return toDTO(member);
+    }
+
+    @Transactional
     public void remove(Long id) {
         if (!projectMemberRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Membro do projeto não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project member not found.");
         }
         projectMemberRepository.deleteById(id);
     }

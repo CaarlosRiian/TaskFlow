@@ -2,6 +2,7 @@ package com.taskflowproject.taskflow.controller;
 
 import com.taskflowproject.taskflow.dto.CreationProjectMemberDTO;
 import com.taskflowproject.taskflow.dto.ProjectMemberDTO;
+import com.taskflowproject.taskflow.dto.UpdateProjectMemberRoleDTO;
 import com.taskflowproject.taskflow.service.ProjectMemberService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,14 @@ public class ProjectMemberController {
     @GetMapping("/project/{projectId}")
     public List<ProjectMemberDTO> listByProject(@PathVariable Long projectId) {
         return projectMemberService.listByProject(projectId);
+    }
+
+    @PutMapping("/{id}/role")
+    public ProjectMemberDTO updateRole(
+            @PathVariable Long id,
+            @RequestBody UpdateProjectMemberRoleDTO dto
+    ) {
+        return projectMemberService.updateRole(id, dto.roleId());
     }
 
     @DeleteMapping("/{id}")

@@ -94,7 +94,11 @@ public class UserService {
     }
 
     public Long getUserIdFromAuth(Authentication auth) {
-        return findByEmail(auth.getName()).getUserId();
+        return userRepository.findByEmail(auth.getName())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "User Not Found!"
+                ))
+                .getUserId();
     }
 
 }
