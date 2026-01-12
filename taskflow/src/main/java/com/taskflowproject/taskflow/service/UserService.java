@@ -4,6 +4,7 @@ import com.taskflowproject.taskflow.dto.UserDTO;
 import com.taskflowproject.taskflow.dto.CreationUserDTO;
 import com.taskflowproject.taskflow.model.User;
 import com.taskflowproject.taskflow.repository.UserRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
@@ -91,4 +92,9 @@ public class UserService {
     private UserDTO mapToDTO(User user) {
         return new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.isActive());
     }
+
+    public Long getUserIdFromAuth(Authentication auth) {
+        return findByEmail(auth.getName()).getUserId();
+    }
+
 }
