@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/project-members")
-public class ProjectMemberController {
+public class ProjectMemberController {  
 
     private final ProjectMemberService projectMemberService;
 

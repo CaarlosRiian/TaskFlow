@@ -7,6 +7,7 @@ import com.taskflowproject.taskflow.service.ProjectService;
 import com.taskflowproject.taskflow.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class ProjectController {
     private UserService userService;
 
     @PostMapping
+    @PreAuthorize("hasRole('GERENTE')")
     public ProjectDTO createProject(@RequestBody @Valid CreationProjectDTO dto) {
         return projectService.createProject(dto);
     }
