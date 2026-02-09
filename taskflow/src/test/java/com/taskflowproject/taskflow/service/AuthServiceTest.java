@@ -34,14 +34,12 @@ class AuthServiceTest {
 
     @BeforeEach
     void setup() {
-        // Como o jwtSecret vem do @Value, precisamos injetar manualmente no teste
         ReflectionTestUtils.setField(authService, "jwtSecret", "minhaSuperChaveSecretaMuitoLongaParaJWT12345");
     }
 
     @Test
     @DisplayName("Deve realizar login com sucesso quando credenciais forem válidas")
     void loginSuccess() {
-        // Arrange
         LoginRequestDTO request = new LoginRequestDTO();
         request.setEmail("teste@taskflow.com");
         request.setPassword("123456");
@@ -55,10 +53,8 @@ class AuthServiceTest {
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(request.getPassword(), user.getPassword())).thenReturn(true);
 
-        // Act
         LoginResponseDTO response = authService.login(request);
 
-        // Assert
         assertNotNull(response.getToken());
         assertEquals("Usuario Teste", response.getName());
         verify(userRepository, times(1)).findByEmail(anyString());
@@ -67,7 +63,6 @@ class AuthServiceTest {
     @Test
     @DisplayName("Deve lançar exceção quando a senha estiver incorreta")
     void loginInvalidPassword() {
-        // Arrange
         LoginRequestDTO request = new LoginRequestDTO();
         request.setEmail("teste@taskflow.com");
         request.setPassword("senha_errada");
@@ -78,7 +73,6 @@ class AuthServiceTest {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
-        // Act & Assert
         assertThrows(RuntimeException.class, () -> authService.login(request));
     }
 }

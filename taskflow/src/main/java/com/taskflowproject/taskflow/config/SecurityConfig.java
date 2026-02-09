@@ -4,6 +4,7 @@ import com.taskflowproject.taskflow.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -37,7 +38,15 @@ public class SecurityConfig {
                         .requestMatchers("/webjars/**").permitAll()
 
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/usuarios/**").hasRole("ADMIN_RH")
+
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers("/users/**").hasAnyAuthority("ADMIN_RH", "ADMIN")
+
+                        .requestMatchers("/roles/**").hasAuthority("ADMIN")
+
+                        .requestMatchers(HttpMethod.DELETE, "/projects/**").hasAuthority("ADMIN")
+                        .requestMatchers("/projects/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

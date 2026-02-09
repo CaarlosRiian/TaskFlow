@@ -22,7 +22,7 @@ public class RoleService {
 
     public RoleDTO create(CreationRoleDTO dto) {
         if (roleRepository.existsByName(dto.name())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role já existe");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Função já existe");
         }
         Role role = new Role();
         role.setName(dto.name());
@@ -38,16 +38,16 @@ public class RoleService {
 
     public RoleDTO getById(Long id) {
         Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Função não encontrada"));
         return toDTO(role);
     }
 
     public RoleDTO updateRole(Long id, @Valid CreationRoleDTO dto) {
         Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Função não encontrada"));
 
         if (roleRepository.existsByName(dto.name()) && !role.getName().equals(dto.name())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role já existe");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Função já existe");
         }
 
         role.setName(dto.name());
@@ -56,7 +56,7 @@ public class RoleService {
 
     public void delete(Long id) {
         Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Função não encontrada"));
         roleRepository.delete(role);
     }
 

@@ -30,9 +30,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.expiration}")
-    private long jwtExpiration;
-
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
@@ -40,10 +37,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 || path.startsWith("/v3/api-docs")
                 || path.startsWith("/swagger-ui")
                 || path.equals("/swagger-ui.html")
-                || path.startsWith("/h2-console")
                 || path.equals("/error")
                 || path.equals("/favicon.ico");
     }
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -68,31 +65,24 @@ public class JwtFilter extends OncePerRequestFilter {
                 String email = claims.getSubject();
 
                 @SuppressWarnings("unchecked")
-                List<String> roles = (List<String>) claims.get("roles", List.class);
+                List<String> roles = (List<String>) claims.get("roles");
 
                 List<SimpleGrantedAuthority> authorities = roles != null ?
                         roles.stream()
-                                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                                .map(SimpleGrantedAuthority::new)
                                 .collect(Collectors.toList())
                         : Collections.emptyList();
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
-                                authorities
-                        );
+                if (email != null) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(email, null, authorities);
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
 
             } catch (Exception e) {
-                log.warn("Invalid JWT: {}", e.getMessage());
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
+                log.warn("Falha na autenticação JWT: {}", e.getMessage());
             }
         }
 

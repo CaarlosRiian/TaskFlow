@@ -41,20 +41,20 @@ public class ProjectMemberService {
     public ProjectMemberDTO add(CreationProjectMemberDTO dto) {
 
         User user = userRepository.findById(dto.userId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário Não Encotrado."));
 
         Project project = projectRepository.findById(dto.projectId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project Not Found."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Projeto Não Encontrado."));
 
         Role role = roleRepository.findById(dto.roleId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role Not Found."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Função Não Encontrada."));
 
         boolean exists = projectMemberRepository.existsByUserUserIdAndProjectProjectIdAndRoleRoleId(
                 dto.userId(), dto.projectId(), dto.roleId()
         );
 
         if (exists) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is already a member of this project with this role.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O usuário já é membro deste projeto com esta função.");
         }
 
         ProjectMember member = new ProjectMember();
@@ -78,12 +78,12 @@ public class ProjectMemberService {
 
         ProjectMember member = projectMemberRepository.findById(projectMemberId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Project member not found."
+                        HttpStatus.NOT_FOUND, "Membro do projeto não encontrado."
                 ));
 
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Role not found."
+                        HttpStatus.NOT_FOUND, "Função Não Encontrada."
                 ));
 
         member.setRole(role);
@@ -94,7 +94,7 @@ public class ProjectMemberService {
     @Transactional
     public void remove(Long id) {
         if (!projectMemberRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project member not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Membro do projeto não encontrado.");
         }
         projectMemberRepository.deleteById(id);
     }

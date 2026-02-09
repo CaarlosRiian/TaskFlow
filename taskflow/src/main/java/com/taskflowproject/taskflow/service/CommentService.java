@@ -4,6 +4,9 @@ import com.taskflowproject.taskflow.dto.*;
 import com.taskflowproject.taskflow.model.Comment;
 import com.taskflowproject.taskflow.model.*;
 import com.taskflowproject.taskflow.repository.*;
+import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,8 +29,9 @@ public class CommentService {
         this.taskRepository = taskRepository;
     }
 
+    @Transactional
+    @CacheEvict(value = "comments", allEntries = true)
     public CommentDTO create(CreationCommentDTO dto) {
-
         User author = userRepository.findById(dto.authorId())
                 .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
 
@@ -45,21 +49,23 @@ public class CommentService {
         return toDTO(saved);
     }
 
+    @Cacheable(value = "comments")
     public List<CommentDTO> getAll() {
         return commentRepository.findAll().stream()
                 .map(this::toDTO)
                 .toList();
     }
 
+    @Cacheable(value = "comments", key = "#id")
     public CommentDTO getById(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comentário não encontrado"));
-
         return toDTO(comment);
     }
 
+    @Transactional
+    @CacheEvict(value = "comments", allEntries = true)
     public CommentDTO update(Long id, UpdateCommentDTO dto) {
-
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comentário não encontrado"));
 
@@ -71,6 +77,8 @@ public class CommentService {
         return toDTO(updated);
     }
 
+    @Transactional
+    @CacheEvict(value = "comments", allEntries = true)
     public void delete(Long id) {
         if (!commentRepository.existsById(id)) {
             throw new RuntimeException("Comentário não existe");

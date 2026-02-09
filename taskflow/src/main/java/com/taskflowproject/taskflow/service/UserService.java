@@ -8,11 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
-
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -36,8 +34,11 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(dto.password()));
         user.setActive(true);
 
-        userRepository.save(user);
+        if (dto.type() != null) {
+            user.setType(dto.type());
+        }
 
+        userRepository.save(user);
         return mapToDTO(user);
     }
 
@@ -68,6 +69,10 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(dto.password()));
         }
 
+        if (dto.type() != null) {
+            user.setType(dto.type());
+        }
+
         return mapToDTO(user);
     }
 
@@ -86,19 +91,16 @@ public class UserService {
 
     private User findUserOrThrow(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário Não encontrado."));
     }
 
     private UserDTO mapToDTO(User user) {
-        return new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.isActive());
+        return new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.isActive(), user.getType());
     }
 
     public Long getUserIdFromAuth(Authentication auth) {
         return userRepository.findByEmail(auth.getName())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "User Not Found!"
-                ))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário Não encontrado."))
                 .getUserId();
     }
-
 }

@@ -16,7 +16,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("TaskFlow API")
-                        .version("1.0")
+                        .version("2.0")
                         .description("Documentação da API - TaskFlow"))
                 .components(new Components()
                         .addSecuritySchemes("bearer-jwt",

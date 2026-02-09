@@ -8,6 +8,8 @@ import com.taskflowproject.taskflow.model.User;
 import com.taskflowproject.taskflow.repository.ProjectRepository;
 import com.taskflowproject.taskflow.repository.TaskRepository;
 import com.taskflowproject.taskflow.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class TaskService {
         this.projectRepository = projectRepository;
     }
 
+    @Cacheable(value = "tasks")
     public List<TaskDTO> getAllTasks() {
         return taskRepository.findAll()
                 .stream()
@@ -35,14 +38,15 @@ public class TaskService {
                 .toList();
     }
 
+    @Cacheable(value = "tasks", key = "#id")
     public TaskDTO getTaskById(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
         return toDTO(task);
     }
 
+    @CacheEvict(value = "tasks", allEntries = true)
     public TaskDTO createTask(CreationTaskDTO dto) {
-
         User user = userRepository.findById(dto.assignedTo())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -68,8 +72,8 @@ public class TaskService {
         return toDTO(savedTask);
     }
 
+    @CacheEvict(value = "tasks", allEntries = true)
     public TaskDTO updateTask(Long id, CreationTaskDTO dto) {
-
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
 
@@ -90,6 +94,7 @@ public class TaskService {
         return toDTO(updatedTask);
     }
 
+    @CacheEvict(value = "tasks", allEntries = true)
     public void deleteTask(Long id) {
         if (!taskRepository.existsById(id)) {
             throw new RuntimeException("Tarefa não encontrada");

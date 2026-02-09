@@ -29,7 +29,7 @@ public class PermissionService {
                 .orElseThrow(() ->
                         new ResponseStatusException(
                                 HttpStatus.FORBIDDEN,
-                                "User is not a member of the project"
+                                "Usuário não é um membro deste projeto!"
                         ));
     }
 
