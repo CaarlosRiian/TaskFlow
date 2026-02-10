@@ -27,3 +27,6 @@ jobs:
         run: |
           cd taskflow/taskflow || cd taskflow
           docker build -t taskflow-api .
+
+      - name: Deploy
+        run: curl -X POST "${{ secrets.EASYPANEL_WEBHOOK_URL }}"
