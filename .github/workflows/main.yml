@@ -19,9 +19,11 @@ jobs:
           cache: maven
 
       - name: Build and Run Tests
-        working-directory: ./taskflow/taskflow
-        run: mvn clean package
+        run: |
+          cd taskflow/taskflow || cd taskflow
+          mvn clean package
 
       - name: Docker Build
-        working-directory: ./taskflow/taskflow
-        run: docker build -t taskflow-api .
+        run: |
+          cd taskflow/taskflow || cd taskflow
+          docker build -t taskflow-api .
