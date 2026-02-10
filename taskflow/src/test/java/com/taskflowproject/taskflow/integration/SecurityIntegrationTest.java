@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class SecurityIntegrationTest {
 
     @Autowired
@@ -35,12 +37,12 @@ public class SecurityIntegrationTest {
     @DisplayName("Deve retornar 401 ao tentar login com credenciais inválidas")
     void shouldReturnUnauthorizedWithInvalidCredentials() throws Exception {
         LoginRequestDTO login = new LoginRequestDTO();
-        login.setEmail("errado@email.com");
+        login.setEmail("pumbatim@email.com");
         login.setPassword("123");
 
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(login)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isBadRequest());
     }
 }

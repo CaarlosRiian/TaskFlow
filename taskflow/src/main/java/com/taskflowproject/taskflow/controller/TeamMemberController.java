@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/team-members")
-@Tag(name = "Membros da Equipe", description = "Endpoints para associar membros de projetos a equipes específicas")
+@Tag(name = "Membros da Equipe", description = "Endpoints para associar membros de projetos a equipes específicas.")
 public class TeamMemberController {
 
     private final TeamMemberService teamMemberService;

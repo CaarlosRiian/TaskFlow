@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
-@Tag(name = "Comentários", description = "Endpoints para interação e feedback em tarefas")
+@Tag(name = "Comentários", description = "Endpoints para interação e feedback em tarefas.")
 public class CommentController {
 
     private final CommentService commentService;
@@ -33,7 +33,7 @@ public class CommentController {
         return commentService.getById(id);
     }
 
-    @Operation(summary = "Criar novo comentário", description = "Adiciona um comentário a uma tarefa. Requer o ID do autor e da tarefa.")
+    @Operation(summary = "Criar novo comentário", description = "Adiciona um comentário a uma tarefa, Requer o ID do autor e da tarefa.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDTO createComment(@RequestBody @Valid CreationCommentDTO dto){

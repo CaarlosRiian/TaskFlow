@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/roles")
-@Tag(name = "Funções (Roles)", description = "Endpoints para gerenciamento de perfis de acesso (GERENTE, SENIOR, etc.)")
+@Tag(name = "Funções (Roles)", description = "Endpoints para gerenciamento de perfis de acesso | GERENTE, SENIOR, etc. |.")
 public class RoleController {
 
     private final RoleService roleService;
@@ -21,7 +21,7 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @Operation(summary = "Criar nova função", description = "Cadastra uma nova Role no sistema (ex: ADMIN, DEV).")
+    @Operation(summary = "Criar nova função", description = "Cadastra uma nova Role no sistema | ex: ADMIN, DEV |.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RoleDTO create(@RequestBody @Valid CreationRoleDTO dto) {
@@ -46,7 +46,7 @@ public class RoleController {
         return roleService.getById(id);
     }
 
-    @Operation(summary = "Excluir função", description = "Remove uma Role do sistema. Atenção: isso pode afetar usuários vinculados.")
+    @Operation(summary = "Excluir função", description = "Remove uma Role do sistema. Observação: isso pode afetar usuários vinculados.")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRole(@PathVariable Long id) {

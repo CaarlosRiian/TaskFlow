@@ -13,13 +13,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@Tag(name = "Usuários", description = "Endpoints para gerenciamento de usuários do sistema")
+@Tag(name = "Usuários", description = "Endpoints para gerenciamento de usuários do sistema.")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @Operation(summary = "Criar novo usuário", description = "Cadastra um novo usuário no sistema. Senhas são criptografadas antes de salvar.")
+    @Operation(summary = "Criar novo usuário", description = "Cadastra um novo usuário no sistema, as senhas são criptografadas antes de salvar.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@RequestBody @Valid CreationUserDTO dto) {
@@ -51,7 +51,7 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @Operation(summary = "Ativar/Desativar usuário", description = "Inverte o status de ativação do usuário (Patch funcional).")
+    @Operation(summary = "Ativar/Desativar usuário", description = "Inverte o status de ativação do usuário | Patch funcional |.")
     @PatchMapping("/{id}/toggle")
     public UserDTO toggleUserActive(@PathVariable Long id) {
         return userService.toggleUserActive(id);

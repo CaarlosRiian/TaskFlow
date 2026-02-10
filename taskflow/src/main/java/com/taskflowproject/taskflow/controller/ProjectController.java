@@ -25,7 +25,7 @@ public class ProjectController {
     @Autowired
     private UserService userService;
 
-    @Operation(summary = "Cria um novo projeto", description = "Apenas administradores podem criar projetos. O criador é definido como gerente.")
+    @Operation(summary = "Cria um novo projeto", description = "Apenas administradores podem criar projetos, o criador é definido como gerente.")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ADMIN')")

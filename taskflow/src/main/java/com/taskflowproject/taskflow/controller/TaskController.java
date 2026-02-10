@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
-@Tag(name = "Tarefas", description = "Endpoints para criação, edição e consulta de tarefas dos projetos")
+@Tag(name = "Tarefas", description = "Endpoints para criação, edição e consulta de tarefas dos projetos.")
 public class TaskController {
 
     private final TaskService taskService;
@@ -41,7 +41,7 @@ public class TaskController {
         return taskService.createTask(dto);
     }
 
-    @Operation(summary = "Atualizar tarefa", description = "Edita as informações de uma tarefa existente (título, descrição, prazo, etc.).")
+    @Operation(summary = "Atualizar tarefa", description = "Edita as informações de uma tarefa existente | título, descrição, prazo, etc. |.")
     @PutMapping("/{id}")
     public TaskDTO updateTask(
             @PathVariable Long id,

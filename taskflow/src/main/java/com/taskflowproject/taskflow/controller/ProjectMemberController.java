@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/project-members")
-@Tag(name = "Membros do Projeto", description = "Endpoints para gerenciar quem participa de cada projeto e suas funções")
+@Tag(name = "Membros do Projeto", description = "Endpoints para gerenciar quem participa de cada projeto e suas funções.")
 public class ProjectMemberController {
 
     private final ProjectMemberService projectMemberService;
