@@ -1,5 +1,6 @@
 package com.taskflowproject.taskflow.dto;
 
+import com.taskflowproject.taskflow.model.enums.UserType;
 import jakarta.validation.constraints.*;
 
 public record CreationUserDTO (
@@ -13,5 +14,7 @@ public record CreationUserDTO (
 
         @NotBlank(message = "A senha é obrigatória")
         @Size(min = 6, message = "A senha deve possuir pelo menos 6 caracteres!")
-        String password
+        String password,
+
+        UserType type
 ){}
