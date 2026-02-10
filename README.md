@@ -33,8 +33,23 @@ A proposta do TaskFlow é resolver problemas comuns de falta de organização e 
 - **Hibernate**
 - **Lombok**
 - **Docker e Docker Compose**
+- **Spring Security & JWT: Autenticação e autorização robusta.**
+- **Redis: Cache para alta performance.**
+- **JUnit 5 & Mockito: Garantia de qualidade via testes.**
+- **GitHub Actions: Pipeline de CI/CD.**
 
-# 1.4 Como Rodar o Projeto Localmente
+# 1.4 Segurança e Autenticação
+A API utiliza Spring Security com autenticação via JWT (JSON Web Token).
+- Login: Endpoint ```/auth/login``` gera o token de acesso.
+- Autorização: Proteção de rotas baseada em roles de usuário.
+- Swagger: Configurado com suporte a ```Bearer Token``` para testes diretos na interface.
+
+# 1.5 Qualidade e Automação
+- Testes Unitários: Focados na camada de ```Service``` (regras de negócio).
+- Testes de Integração: Validam o fluxo completo (Controller -> Banco) utilizando banco de dados H2 em memória.
+- CI/CD: Pipeline automatizada no GitHub Actions que executa o build e os testes em cada push.
+
+# 1.6 Como Rodar o Projeto Localmente
 
 ### Pré-requisitos
 - Java 21
@@ -126,7 +141,13 @@ Banco PostgreSQL: porta ```5432```
 | **PUT**    | `/comments/{id}`        | Atualizar um comentário               | **200 OK**, 400 Bad Request, 404 Not Found                         |
 | **DELETE** | `/comments/{id}`        | Excluir um comentário                 | **204 No Content**, 404 Not Found                                  |
 
+---
 
+## Auth - Autenticação
+
+| Método | Endpoint            | Descrição                            | Códigos de Resposta                                                                                    |
+|--------|----------------------|----------------------------------------|--------------------------------------------------------------------------------------------------------|
+| **POST**   | `/auth/login`             | Autentica usuário e retorna o Token JWT                   | **200** OK, **401** Unauthorized (Senha/Email inválidos), **400** Bad Request (Usuário não encontrado) |
 
 # 4. Modelo Lógico
 
