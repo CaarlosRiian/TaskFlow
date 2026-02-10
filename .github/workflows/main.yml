@@ -42,8 +42,7 @@ jobs:
       - name: Build e Push da Imagem
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./taskflow/taskflow/Dockerfile
+          context: ./taskflow/taskflow
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
           cache-from: type=gha
@@ -52,4 +51,3 @@ jobs:
       - name: Trigger Easypanel Webhook
         run: |
           curl -X POST "${{ secrets.EASYPANEL_WEBHOOK_URL }}"
-          
