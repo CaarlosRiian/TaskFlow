@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./taskflow/taskflow
-          file: ./Dockerfile
+          file: ./taskflow/taskflow/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}:latest
           cache-from: type=gha
@@ -52,6 +52,7 @@ jobs:
       - name: Trigger Easypanel Webhook
         run: |
           curl -X POST "${{ secrets.EASYPANEL_WEBHOOK_URL }}"
+
 
 
 
