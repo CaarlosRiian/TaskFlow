@@ -51,3 +51,4 @@ jobs:
       - name: Trigger Easypanel Webhook
         run: |
           curl -X POST "${{ secrets.EASYPANEL_WEBHOOK_URL }}"
+          
